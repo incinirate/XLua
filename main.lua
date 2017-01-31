@@ -1,7 +1,8 @@
 io.stdout:setvbuf("no")
 
 local x = require("XLua/x")
-local demoX = require("demoX")
+local cont = require("demoX")
+local demoX, extern = unpack(cont)
 local demoGame = require("demoGame")
 
 local graphics = love.graphics
@@ -16,6 +17,9 @@ end
 
 function love.update(dt)
   demoGame.update(dt)
+
+  demoGame.gravMod = extern[1].value
+  demoGame.shaderPass = extern[2].active
 end
 
 function love.draw()

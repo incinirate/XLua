@@ -15,6 +15,7 @@ function slider.new(args)
   t:d("step", 1)
   t:d("unit", "%")
   t:d("value", 50)
+  t:d("disabled", false)
   t.perc = (t.value - t.min) / (t.max - t.min)
 
   t:d("height", 16)
@@ -24,10 +25,13 @@ function slider.new(args)
   t.x = 0
   t.y = 0
 
+  t.highlight = false
+
   return t
 end
 
 function slider:colorize(theme)
+  self.colorHl = theme.highlightColor
   self.colorBg = theme.actionColorSecondary
   self.colorFg = theme.actionColorPrimary
   self.colorAc = theme.actionColorAccent
@@ -35,7 +39,8 @@ function slider:colorize(theme)
 end
 
 function slider:updateVal(x)
-  local perc = (x - 12) / (self.width - 12)
+  if self.disabled then return end
+  local perc = (x - 7) / (self.width - 12)
   perc = util.clamp(perc, 0, 1)
 
   local newval = (self.max - self.min)*perc + self.min
@@ -45,14 +50,19 @@ end
 
 function slider:mousePressed(x, y, button, isTouch)
   if util.inBox(x, y, false, self.x, self.y, self.width, self.height) then
-    self:updateVal(x)
+    self:updateVal(x - self.x + 1)
     self.focused = true
   end
 end
 
 function slider:mouseMoved(x, y, button, isTouch)
   if self.focused then
-    self:updateVal(x)
+    self:updateVal(x - self.x + 1)
+  end
+  if util.inBox(x, y, false, self.x + 1 + self.perc*(self.width - 12), self.y + 1, 10, self.height - 2) then
+    self.highlight = true
+  else
+    self.highlight = false
   end
 end
 
@@ -67,8 +77,10 @@ function slider:draw()
   graphics.setColor(self.colorBg)
   graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
-  graphics.setColor(self.focused and self.colorAc or self.colorFg)
-  graphics.rectangle("fill", self.x + 1 + self.perc*(self.width - 12), self.y + 1, 10, self.height - 2)
+  if not self.disabled then
+    graphics.setColor(self.focused and self.colorAc or (self.highlight and self.colorHl or self.colorFg))
+    graphics.rectangle("fill", self.x + 1 + self.perc*(self.width - 12), self.y + 1, 10, self.height - 2)
+  end
 
   graphics.setColor(self.colorTx)
   local text = tostring(self.value) .. self.unit

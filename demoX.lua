@@ -15,10 +15,11 @@ local sepLabel = x.label.new({text="Test label", align="center"})
 sepLabel.stretch = 3
 win:attachChild(sepLabel)
 
+local gslid = x.slider.new({value=1, min=-1, max=1, step=.01})
 win:attachChild({
-  x.slider.new({value=70}),
+  gslid,
   x.blank.new({}),
-  x.label.new({text="Test Slider"})
+  x.label.new({text="Gravity"})
 })
 
 win:attachChild({
@@ -27,6 +28,25 @@ win:attachChild({
   x.label.new({text="More Slider"})
 })
 
-return {
+local fr = x.flexRow.new({})
+
+fr:attachChild(x.slider.new({value=70, max=100, step=1, disabled = true}))
+fr:attachChild(x.button.new({width=16, label="-"}))
+fr:attachChild(x.button.new({width=16, label="+"}))
+
+win:attachChild(fr)
+
+local fr2 = x.flexRow.new({pad = 4})
+
+local chk = x.checkbox.new({width=16, active = true})
+fr2:attachChild(chk)
+fr2:attachChild(x.label.new({text="Shader pass"}))
+
+win:attachChild(fr2)
+
+return {{
   win
-}
+}, {
+  gslid,
+  chk
+}}

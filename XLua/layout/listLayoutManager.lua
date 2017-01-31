@@ -44,7 +44,11 @@ function manager:layoutInternal(e, parent, y, wm, ewm)
 
   e.x = 4 + (twid * pad)
   e.y = y
-  e.width = twid * wperc
+  if e.setWidth then
+    e:setWidth(twid * wperc)
+  else
+    e.width = twid * wperc
+  end
 
   return y + (e.calcHeight and e.calcHeight() or (e.height and e.height or 16))
 end

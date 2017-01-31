@@ -28,6 +28,9 @@ tShader:send("lightPos", {20, 40})
 
 local demo = {}
 
+demo.gravMod = 1
+demo.shaderPass = true
+
 local function grounded()
   local h = 0
 
@@ -60,11 +63,16 @@ function demo.update(dt)
       playerXVel = 0
     end
   else
-    playerYVel = playerYVel + gravity * dt
+    playerYVel = playerYVel + gravity * demo.gravMod * dt
   end
 end
 
 function sceneDraw()
+  if not demo.shaderPass then
+    graphics.setColor(128, 179, 230)
+    graphics.rectangle("fill", 0, 0, sWidth, sHeight)
+  end
+
   graphics.setColor(57, 93, 51)
   graphics.rectangle("fill", 0, sHeight - 300, sWidth, 300)
   for i=1, 4 do
@@ -85,11 +93,15 @@ function demo.draw()
   tShader:send("iChannel0", canvas)
 
   graphics.setColor(255, 255, 255, 255)
-  graphics.setShader(tShader)
-  graphics.setBlendMode("alpha", "premultiplied")
-  graphics.rectangle("fill", 0, 0, sWidth, sHeight)
-  graphics.setBlendMode("alpha")
-  graphics.setShader()
+  if demo.shaderPass then
+    graphics.setShader(tShader)
+    graphics.setBlendMode("alpha", "premultiplied")
+    graphics.rectangle("fill", 0, 0, sWidth, sHeight)
+    graphics.setBlendMode("alpha")
+    graphics.setShader()
+  else
+    graphics.draw(canvas, 0, 0)
+  end
 end
 
 function demo.keyPressed(k)

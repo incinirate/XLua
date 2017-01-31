@@ -55,6 +55,6 @@ vec4 mainImage(in vec2 fragCoord) {
 }
 
 
-vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 gl_FragCoord) {
-  return mainImage(gl_FragCoord);
+vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 fragCoord) {
+  return mainImage(fragCoord);
 }

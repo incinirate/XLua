@@ -1,5 +1,5 @@
 local util = require("XLua/util")
-local listLayoutManager = require("XLua/listLayoutManager")
+local listLayoutManager = require("XLua/layout/listLayoutManager")
 
 local window = {}
 
@@ -26,6 +26,11 @@ function window.construct(args)
   t.d(t.theme, "actionColorPrimary", {50, 96, 115, 200})
   t.d(t.theme, "actionColorSecondary", {51, 86, 100, 200})
   t.d(t.theme, "actionColorAccent", {48, 118, 146, 200})
+  t.d(t.theme, "activeColor", {48, 120, 149, 200})
+  t.d(t.theme, "highlightColor", {57, 105, 123, 200})
+  t.d(t.theme, "accentColor", {118, 82, 83, 200})
+  t.d(t.theme, "accentColorSecondary", {106, 74, 75, 200})
+  t.d(t.theme, "accentColorAccent", {130, 90, 91, 200}) -- lol
 
   t:d("layoutManager", listLayoutManager.new())
 
